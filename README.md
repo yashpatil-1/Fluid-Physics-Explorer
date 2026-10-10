@@ -1,84 +1,141 @@
-# fluid-particle-simulator
+# 🌊 Fluid Physics Explorer
 
-## dev/creator=tubakhxn
+### Interactive 3D Fluid Simulation with Real-Time Hand Tracking
 
-A hand-controlled 3D fluid particle simulation that runs in your browser. Your webcam is the background, a red liquid sloshes inside an orange wireframe cube, and your hands rotate and zoom the cube.
+Fluid Physics Explorer is an interactive, browser-based 3D fluid simulation that combines particle physics, real-time graphics, and computer vision. Users can manipulate a container of simulated liquid using webcam-based hand gestures, creating an immersive way to explore fluid behaviour.
 
-## About
+The simulation runs directly in the browser using **JavaScript, WebGL2, and MediaPipe Hand Landmarker**, without requiring specialised hardware beyond a webcam.
 
-- About 3600 particles are simulated as a real 3D fluid (gravity, pressure, viscosity, wall collisions).
-- The liquid is drawn on the GPU (WebGL2) as a smooth translucent surface with fine ring particles on top.
-- Hand tracking uses Google MediaPipe Hand Landmarker, so no hardware besides a webcam is needed.
-- Everything is plain HTML, CSS and JavaScript. There are no dependencies and no build step.
+## ✨ Features
 
-## Controls
+- **Real-Time Fluid Physics:** Simulates approximately 3,600 particles using gravity, pressure, viscosity, and wall collisions.
+- **Gesture-Based Interaction:** Uses webcam hand tracking to control the simulation.
+- **3D Visualisation:** Displays translucent red liquid inside an orange wireframe cube.
+- **GPU Rendering:** Uses WebGL2 for fluid rendering and visual effects.
+- **Background Physics Processing:** Uses a Web Worker to keep physics calculations separate from the main rendering thread.
+- **Interactive Camera Controls:** Rotate and zoom using hand movements or mouse controls.
+- **Browser-Based Experience:** Runs locally without a separate backend service or API key.
 
-| Input | Result |
-| --- | --- |
-| One hand | Tilt, rotate and move your hand: the cube follows and the liquid sloshes. The size stays constant (1x). |
-| Two hands | Spread them apart to zoom gently up to 2x. Bring them together to return to 1x. |
-| No hand | The cube tumbles on its own. |
-| No camera: mouse drag | Rotate the cube. |
-| No camera: mouse wheel | Zoom (1x to 2x). |
-| `R` | Reset the liquid. |
+## 🖐️ Controls
 
-## Requirements
+| Interaction | Action |
+|---|---|
+| Move one hand | Tilt, rotate, and move the container |
+| Spread two hands apart | Zoom in |
+| Bring two hands together | Return towards default zoom |
+| No hand detected | Container tumbles automatically |
+| Mouse drag | Rotate the container |
+| Mouse wheel | Zoom in or out |
+| `R` | Reset the liquid simulation |
 
-- Node.js 18 or newer (only used to serve the files on localhost; tested on Node 22)
-- A modern browser with WebGL2 (Chrome, Edge, Firefox, Safari 15+)
+## 🛠️ Technology Stack
+
+- **Frontend:** HTML5, CSS3, JavaScript
+- **3D Graphics:** WebGL2
+- **Computer Vision:** Google MediaPipe Hand Landmarker
+- **Physics Simulation:** Custom JavaScript particle simulation
+- **Parallel Processing:** Web Workers
+- **Local Development Server:** Node.js
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18 or newer
+- A modern browser with WebGL2 support
 - A webcam
-- An internet connection on first load (the MediaPipe library and hand model load from a CDN)
-- Camera access only works on `localhost` or HTTPS
+- An internet connection to load the MediaPipe library and hand-tracking model when required
 
-## Run
+### Installation
 
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/yashpatil-1/Fluid-Physics-Explorer.git
+cd Fluid-Physics-Explorer
 ```
+
+**2. Install the project dependencies**
+
+```bash
 npm install
+```
+
+The project does not declare external npm dependencies, so installation is primarily for setting up the local environment.
+
+**3. Start the development server**
+
+```bash
 npm run dev
 ```
 
-Open the URL it prints (usually http://localhost:5173) and click **Allow camera access**. If port 5173 is busy, the server uses the next free port automatically.
+**4. Open the application**
 
-`npm install` has nothing to download, because the project has no dependencies. There is also no build step: the project is static files, so you can deploy the folder as it is to any static host (GitHub Pages, Netlify, Vercel). Camera access needs HTTPS there.
+Open the local URL printed in your terminal, usually:
 
-## Fork and contribute
+`http://localhost:5173`
 
-1. Click **Fork** at the top right of the repository page on GitHub.
-2. Clone your fork:
-   ```
-   git clone https://github.com/<your-username>/<repo-name>.git
-   cd <repo-name>
-   ```
-3. Create a branch:
-   ```
-   git checkout -b my-change
-   ```
-4. Run it with `npm run dev`, make your changes, and test them in the browser.
-5. Commit and push:
-   ```
-   git add .
-   git commit -m "describe your change"
-   git push origin my-change
-   ```
-6. Open a **Pull Request** from your branch on GitHub.
+Allow camera access when prompted to enable hand tracking.
 
-## Files
+> **Note:** Webcam access generally requires `localhost` or HTTPS. MediaPipe resources may require an internet connection.
 
-| File | What it does |
-| --- | --- |
-| `index.html` | Page layout: webcam video, WebGL canvas, cube overlay and panels |
-| `style.css` | Styling |
-| `app.js` | Hand tracking, cube control, GPU liquid rendering, side panels |
-| `sim.js` | The 3D particle fluid physics |
-| `worker.js` | Runs the physics in a Web Worker so rendering stays smooth |
-| `server.js` | Tiny static server for localhost |
+## 🧠 How It Works
 
-## Tuning
+The application combines three main components:
 
-- Particle count: the number in `worker.js` (`new Fluid(3600)`). Lower it on slow machines. It also reduces itself automatically if the physics cannot keep up.
-- Zoom range and cube size: `baseSc` and the zoom mapping in `app.js`.
-- Liquid colours: the `RES_FS` shader in `app.js`.
+1. **Hand Tracking:** MediaPipe detects hand landmarks from the webcam feed.
+2. **Physics Simulation:** The simulation updates particle positions and velocities based on fluid forces and container collisions.
+3. **3D Rendering:** WebGL2 renders the liquid and wireframe container while a Web Worker handles physics calculations separately.
 
-## Credits
+Together, these components create an interactive experience where hand movements influence the container and the simulated liquid responds dynamically.
 
-Made by **tubakhxn**. Hand tracking by [MediaPipe](https://ai.google.dev/edge/mediapipe) (Google).
+## 📁 Project Structure
+
+```text
+Fluid-Physics-Explorer/
+├── index.html   # Application structure
+├── style.css    # Visual styling
+├── app.js       # Hand tracking and rendering
+├── sim.js       # Fluid physics simulation
+├── worker.js    # Background physics calculations
+├── server.js    # Local development server
+├── package.json # Project scripts and metadata
+├── package-lock.json
+├── README.md
+└── LICENSE
+```
+
+## 🎯 Potential Applications
+
+- Interactive demonstrations of fluid dynamics
+- Computer vision and gesture-control experiments
+- Browser-based 3D visualisation
+- Educational demonstrations of physics concepts
+- Exploration of real-time graphics and simulation performance
+
+## 🔮 Future Improvements
+
+- Add adjustable viscosity, gravity, and particle density.
+- Introduce multiple fluid colours and simulation presets.
+- Add performance statistics and simulation controls.
+- Improve mobile and touch-screen compatibility.
+- Provide educational explanations of the physics behind the simulation.
+
+## 📚 Credits and Attribution
+
+This project is based on the original **Fluid Particle Simulator** created by [tubakhxn](https://github.com/tubakhxn).
+
+- **Original repository:** https://github.com/tubakhxn/fluid-particle-simulator
+- **MediaPipe:** https://ai.google.dev/edge/mediapipe
+
+This repository is an organised portfolio version of the original project. The original implementation and applicable license remain acknowledged. Please review the included `LICENSE` before redistributing or modifying the project.
+
+## 👨‍💻 Maintained By
+
+**Yash Patil**
+
+GitHub: [@yashpatil-1](https://github.com/yashpatil-1)
+
+---
+
+*Exploring the intersection of physics, computer vision, and interactive 3D technology.*
